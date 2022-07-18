@@ -1,0 +1,41 @@
+---
+title: "AvatarNetwork"
+author: "Vas and Psych"
+date: '2022-07-17'
+output: html_document
+---
+
+Install Pachages and run the library
+```{r}
+#install.packages("bootnet")
+#install.packages("networktools")
+#install.packages("NetworkComparisonTest")
+#install.packages("qgraph")
+#install.packages("psych")
+#install.packages("tidyverse")
+#install.packages("semTools")
+#install.packages("psychotools")
+#install.packages("semPlot")
+#install.packages("haven")
+library(bootnet)
+library(networktools)
+library(NetworkComparisonTest)
+library(qgraph)
+library(psych)
+library(psychotools)
+library(tidyverse)
+library(semTools)
+library(semPlot)
+library(haven)
+
+```
+Setup the data
+```{r}
+dataset <- read_sav("data.sav")
+View(dataset)
+myvars <- c("Age", "Gender_New", "IGDTotal", "PON", "POF", "IDENT", "IMMERS","Compensation")
+netdata <- dataset[myvars]
+describe(netdata)
+
+```
+
