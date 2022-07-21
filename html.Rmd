@@ -31,6 +31,7 @@ library(haven)
 ```
 Setup the data
 ```{r}
+
 dataset <- read_sav("data.sav")
 View(dataset)
 myvars <- c("Age", "Gender_New", "IGDTotal", "PON", "POF", "IDENT", "IMMERS","Compensation")
@@ -42,7 +43,14 @@ describe(netdata1)
 describe(netdata2)
 
 ```
-Name the Nodes (variables), if they don't already have names in the dataset.
+#A few words about Networks
+1. Deegree/ Strength centrality= the number of links incident upon a node (i.e., the number of ties that a node has). The degree can be interpreted in terms of the immediate risk of a node for catching whatever is flowing through the network (such as a virus, or some information). 
+In the case of a directed network (where ties have direction), we usually define two separate measures of degree centrality, namely indegree and outdegree. 
+2. Closeness centrality (or closeness) of a node is the average length of the shortest path between the node and all other nodes in the graph. Thus the more central a node is, the closer it is to all other nodes.
+3. Betweenness centrality quantifies the number of times a node acts as a bridge along the shortest path between two other nodes.
+4. Eigenvector centrality (also called eigencentrality or expected influence) is a measure of the influence of a node in a network. It assigns relative scores to all nodes in the network based on the concept that connections to high-scoring nodes contribute more to the score of the node in question than equal connections to low-scoring nodes
+
+#Name the Nodes (variables), if they don't already have names in the dataset.
 ```{r echo=FALSE, warning=FALSE, error=FALSE}
 names <- c("AGE", "GENDER", "INTERNET GAMING DISORDER", "PROTEUS EFFECT ONLINE", "PROTEUS EFFECT OFFLINE", "IDENTIFICATION", "IMMERSION", "COMPENSATION")
 names1<- c("AGE","INTERNET GAMING DISORDER", "PROTEUS EFFECT ONLINE", "PROTEUS EFFECT OFFLINE", "IDENTIFICATION", "IMMERSION", "COMPENSATION")
