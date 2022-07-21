@@ -1,0 +1,25 @@
+"","graph","type","node","measure","value"
+"1","graph 1",NA,"IGDTotal","Betweenness",-0.597614304667197
+"2","graph 1",NA,"PON","Betweenness",0.597614304667197
+"3","graph 1",NA,"POF","Betweenness",-0.597614304667197
+"4","graph 1",NA,"IDENT","Betweenness",-0.597614304667197
+"5","graph 1",NA,"IMMERS","Betweenness",1.79284291400159
+"6","graph 1",NA,"Compensation","Betweenness",-0.597614304667197
+"7","graph 1",NA,"IGDTotal","Closeness",-1.02781947723222
+"8","graph 1",NA,"PON","Closeness",0.153135374135696
+"9","graph 1",NA,"POF","Closeness",-0.518542918054153
+"10","graph 1",NA,"IDENT","Closeness",-0.600375015369326
+"11","graph 1",NA,"IMMERS","Closeness",1.80413466132779
+"12","graph 1",NA,"Compensation","Closeness",0.189467375192212
+"13","graph 1",NA,"IGDTotal","Strength",-1.28198003935002
+"14","graph 1",NA,"PON","Strength",1.11397796773869
+"15","graph 1",NA,"POF","Strength",0.335664810850565
+"16","graph 1",NA,"IDENT","Strength",-0.892093536970732
+"17","graph 1",NA,"IMMERS","Strength",1.04948482631094
+"18","graph 1",NA,"Compensation","Strength",-0.325054028579439
+"19","graph 1",NA,"IGDTotal","ExpectedInfluence",-1.28198003935002
+"20","graph 1",NA,"PON","ExpectedInfluence",1.11397796773869
+"21","graph 1",NA,"POF","ExpectedInfluence",0.335664810850565
+"22","graph 1",NA,"IDENT","ExpectedInfluence",-0.892093536970732
+"23","graph 1",NA,"IMMERS","ExpectedInfluence",1.04948482631094
+"24","graph 1",NA,"Compensation","ExpectedInfluence",-0.325054028579439

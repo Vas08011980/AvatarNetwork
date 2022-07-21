@@ -6,7 +6,7 @@ output: html_document
 ---
 
 Install Pachages and run the library
-```{r}
+```{r echo=FALSE, warning=FALSE error=FALSE}
 #install.packages("bootnet")
 #install.packages("networktools")
 #install.packages("NetworkComparisonTest")
@@ -35,7 +35,71 @@ dataset <- read_sav("data.sav")
 View(dataset)
 myvars <- c("Age", "Gender_New", "IGDTotal", "PON", "POF", "IDENT", "IMMERS","Compensation")
 netdata <- dataset[myvars]
+netdata1<-netdata[c(-2)]
+netdata2<-netdata1[c(-1)]
 describe(netdata)
+describe(netdata1)
+describe(netdata2)
+
+```
+Name the Nodes (variables), if they don't already have names in the dataset.
+```{r echo=FALSE, warning=FALSE, error=FALSE}
+names <- c("AGE", "GENDER", "INTERNET GAMING DISORDER", "PROTEUS EFFECT ONLINE", "PROTEUS EFFECT OFFLINE", "IDENTIFICATION", "IMMERSION", "COMPENSATION")
+names1<- c("AGE","INTERNET GAMING DISORDER", "PROTEUS EFFECT ONLINE", "PROTEUS EFFECT OFFLINE", "IDENTIFICATION", "IMMERSION", "COMPENSATION")
+names2 <-c("INTERNET GAMING DISORDER", "PROTEUS EFFECT ONLINE", "PROTEUS EFFECT OFFLINE", "IDENTIFICATION", "IMMERSION", "COMPENSATION")
+```
+Estimate Network(s) with and without age 
+```{r echo=FALSE, warning=FALSE, error=FALSE}
+network1 <- estimateNetwork(netdata1, default="EBICglasso")
+network2 <- estimateNetwork(netdata2, default="EBICglasso")
+
+```
+Grouping nodes-if you need it
+```{r echo=FALSE, warning=FALSE, error=FALSE}
+#group Ptoteus (Avatar to Gamer effects) and (Gamer to Avatar Effects) nodes
+groups2=list("IGD"=c(1),"AGE"=c(2:3), "GAE"=c(4:6))
+
+```
+Estimate Network Stability by bootstrapping network
+```{r echo=FALSE, error=FALSE, warning=FALSE}
+#Default Bootstrapping
+b1 <- bootnet(network2, boots=1000, statistics=c("strength", "expectedInfluence", "edge"))
+#Case Dropping Bootstrapping
+b2 <- bootnet(network2, boots=1000, type="case", statistics=c("strength", "expectedInfluence", "edge"))
+```
+Plot the Network
+```{r echo=FALSE, error=FALSE, warning=FALSE}
+
+plot(network2, layout="spring", vsize=6, border.color="black", groups=groups1, color=c('lightblue','orange', 'red'))
+
+
+```
+Get Centrality Indices
+```{r}
+#Centrality1<-
+centralityTable(network2)
+#write.csv(Centrality1, "Centrality1.csv")
+#view(Centrality1)
+```
+
+
+Get centrality stability coefficient
+```{r echo=FALSE, error=FALSE, warning=FALSE}
+corStability(b2)
+```
+
+Stability of the Network Plotting
+```{r}
+#pdf("CentrStability1.pdf")
+plot(b2)
+#dev.off()
 
 ```
 
+```{r}
+#pdf("edges.pdf")
+plot(b1, "edge", plot="difference", onlyNonZero=TRUE, order = "sample")
+
+
+
+```
