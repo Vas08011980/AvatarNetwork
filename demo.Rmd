@@ -34,11 +34,51 @@ Importing the data
 dataset <- read_sav("data.sav") 
 View(dataset)
 myvars <- c("Age", "Gender_New", "IGDTotal", "PON", "POF", "IDENT", "IMMERS","Compensation")
+myvars2<-c("PON", "POF", "IDENT")
 netdata <- dataset[myvars]
 netdata1<-netdata[c(-2)]
 netdata2<-netdata1[c(-1)]
+netdata3<-dataset[myvars2]
+netdata4<-netdata3[c(-2)]
 describe(netdata)
 describe(netdata1)
 describe(netdata2)
+view(netdata3)
+describe(netdata4)
 ```
+#A few words about Networks
+1. Deegree/ Strength centrality= the number of links incident upon a node (i.e., the number of ties that a node has). The degree can be interpreted in terms of the immediate risk of a node for catching whatever is flowing through the network (such as a virus, or some information). 
+In the case of a directed network (where ties have direction), we usually define two separate measures of degree centrality, namely indegree and outdegree. 
+2. Closeness centrality (or closeness) of a node is the average length of the shortest path between the node and all other nodes in the graph. Thus the more central a node is, the closer it is to all other nodes.
+3. Betweenness centrality quantifies the number of times a node acts as a bridge along the shortest path between two other nodes.
+4. Eigenvector centrality (also called eigencentrality or expected influence) is a measure of the influence of a node in a network. It assigns relative scores to all
+#Run Names if you don't have names in your dataset
+```{r echo=FALSE, warning=FALSE, error=FALSE}
+#names <- c("AGE", "GENDER", "INTERNET GAMING DISORDER", "PROTEUS EFFECT ONLINE", #"PROTEUS EFFECT OFFLINE", "IDENTIFICATION", "IMMERSION", "COMPENSATION")
+#names1<- c("AGE","INTERNET GAMING DISORDER", "PROTEUS EFFECT ONLINE", "PROTEUS #EFFECT OFFLINE", "IDENTIFICATION", "IMMERSION", "COMPENSATION")
+#names2 <-c("INTERNET GAMING DISORDER", "PROTEUS EFFECT ONLINE", "PROTEUS EFFECT #OFFLINE", "IDENTIFICATION", "IMMERSION", "COMPENSATION")
+```
+
+Estimate Network(s) with and without age 
+```{r echo=FALSE, warning=FALSE, error=FALSE}
+network1<-estimateNetwork(netdata1, default="EBICglasso")
+network2<- estimateNetwork(netdata2, default="EBICglasso")
+```
+For Grouping Variables
+Grouping nodes-if you need it
+```{r echo=FALSE, warning=FALSE, error=FALSE}
+#group Ptoteus (Avatar to Gamer effects) and (Gamer to Avatar Effects) nodes
+groups2=list("IGD"=c(1),"AGE"=c(2:3), "GAE"=c(4:6))
+```
+Calculating with bootstraping the network
+```{r echo=FALSE, error=FALSE, warning=FALSE}
+#Default Bootstrapping
+b1 <- bootnet(network2, boots=1000, statistics=c("strength", "expectedInfluence", "edge"))
+#Case Dropping Bootstrapping
+b2 <- bootnet(network2, boots=1000, type="case", statistics=c("strength", "expectedInfluence", "edge"))
+```
+```{r}
+plot(network2, layout="spring", vsize=10, border.color="black", groups=groups2, color=c('lightblue','orange', 'red'))
+```
+
 
