@@ -1,0 +1,125 @@
+---
+title: "Demo"
+author: "Vas and Psych"
+date: '2022-07-21'
+output: html_document
+---
+Setup Packages Installation and Libraries
+```{r}
+#install.packages("bootnet")
+#install.packages("networktools")
+#install.packages("NetworkComparisonTest")
+#install.packages("qgraph")
+#install.packages("psych")
+#install.packages("tidyverse")
+#install.packages("semTools")
+#install.packages("psychotools")
+#install.packages("semPlot")
+#install.packages("haven")
+library(bootnet)
+library(networktools)
+library(NetworkComparisonTest)
+library(qgraph)
+library(psych)
+library(psychotools)
+library(tidyverse)
+library(semTools)
+library(semPlot)
+library(haven)
+
+```
+
+Importing the data
+```{r echo=FALSE, warning=FALSE, error=FALSE}
+dataset <- read_sav("data.sav")
+data<-read_sav("C:/Users/vasil/Desktop/Desktop 2022/PhDs/LizzieandFriends/useravatar/AvatarNetwork 2 months later/data.sav")
+View(dataset)
+# Look at the variables within the dataset 
+names(dataset)
+myvars <- c("Age", "Gender_New", "IGDTotal", "PON", "POF", "IDENT", "IMMERS","Compensation")
+### subset data to run a network with desired variables.
+## In this case I will look at columns 28-33
+netweorkdata <- dataset %>%
+  select(28:33)
+names(netweorkdata)
+#myvars2<-c("PON", "POF", "IDENT")
+netdata <- dataset[myvars]
+netdata1<-netdata[c(-2)]
+netdata2<-netdata1[c(-1)]
+view(netdata1)
+view(netdata2)
+#netdata3<-dataset[myvars2]
+#describe(netdata3)
+#netdata4<-netdata3[c(-2)]
+describe(netdata)
+describe(netdata1)
+describe(netdata2)
+#view(netdata3)
+#describe(netdata4)
+```
+#A few words about Networks
+1. Deegree/ Strength centrality= the number of links incident upon a node (i.e., the number of ties that a node has). The degree can be interpreted in terms of the immediate risk of a node for catching whatever is flowing through the network (such as a virus, or some information). 
+In the case of a directed network (where ties have direction), we usually define two separate measures of degree centrality, namely indegree and outdegree. 
+2. Closeness centrality (or closeness) of a node is the average length of the shortest path between the node and all other nodes in the graph. Thus the more central a node is, the closer it is to all other nodes.
+3. Betweenness centrality quantifies the number of times a node acts as a bridge along the shortest path between two other nodes.
+4. Eigenvector centrality (also called eigencentrality or expected influence) is a measure of the influence of a node in a network. It assigns relative scores to all
+#Run Names if you don't have names in your dataset
+```{r echo=FALSE, warning=FALSE, error=FALSE}
+#names <- c("AGE", "GENDER", "INTERNET GAMING DISORDER", "PROTEUS EFFECT ONLINE", #"PROTEUS EFFECT OFFLINE", "IDENTIFICATION", "IMMERSION", "COMPENSATION")
+#names1<- c("AGE","INTERNET GAMING DISORDER", "PROTEUS EFFECT ONLINE", "PROTEUS #EFFECT OFFLINE", "IDENTIFICATION", "IMMERSION", "COMPENSATION")
+#names2 <-c("INTERNET GAMING DISORDER", "PROTEUS EFFECT ONLINE", "PROTEUS EFFECT #OFFLINE", "IDENTIFICATION", "IMMERSION", "COMPENSATION")
+```
+
+Estimate Network(s) with and without age 
+```{r echo=FALSE, warning=FALSE, error=FALSE}
+network1<-estimateNetwork(netdata1, default="EBICglasso")
+## inspect the object to assess number of non-zero edges
+network1
+network2<- estimateNetwork(netdata2, default="EBICglasso")
+## inspect the object to assess number of non-zero edges
+network2
+## you can also write an excel file with your regularized correlation matrix
+## for subsequent analyses
+Crmnet1 <-as.tibble(getWmat(network1))
+view(Crmnet1)
+names(Crmnet1)
+describe(Crmnet1)
+write_csv(Crmnet1, "reg correlation matrix 1.csv")
+```
+For Grouping Variables
+Grouping nodes-if you need it
+```{r echo=FALSE, warning=FALSE, error=FALSE}
+#group Ptoteus (Avatar to Gamer effects) and (Gamer to Avatar Effects) nodes
+groups2=list("IGD"=c(1),"AGE"=c(2:3), "GAE"=c(4:6))
+#Mygroups <- list("IGD"=c(1),"AGE"=c(2:3), "GAE"=c(4:6)) 
+```
+Calculating with bootstraping the network
+```{r echo=FALSE, error=FALSE, warning=FALSE}
+#Default Bootstrapping
+b1 <- bootnet(network2, boots=1000, statistics=c("strength", "expectedInfluence", "edge"))
+#Case Dropping Bootstrapping
+b2 <- bootnet(network2, boots=1000, type="case", statistics=c("strength", "expectedInfluence", "edge"))
+```
+```{r}
+
+plot(network2, layout="spring", vsize=6, border.color="black", groups=groups2, color=c('lightblue','orange', 'red')) 
+
+plot(b2, layout="spring", label.color="black", label.prop = 0.9,
+     legend.cex = 0.5, font = 2, vsize = 4, groups=groups2, 
+     color=c('lightblue', 'orange', 'red'))
+
+```
+```{r echo=FALSE, warning=FALSE, error=FALSE}
+
+## Correlation stability coefficient and plot
+
+crs<-corStability(b2)
+view(crs)
+write.csv(crs)
+plot(b2, "all")
+
+plot(b1, labels = F, order = "sample")
+
+```
+
+
